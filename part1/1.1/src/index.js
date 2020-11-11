@@ -2,19 +2,32 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const App = () => {
-  const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exercises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  }
 
   return (
     <div>
-      <Header course={course} />
-      <Content part1={part1} exercises1={exercises1} part2={part2} exercises2={exercises2} part3={part3} exercises3={exercises3} />
-      <Total number={exercises1 + exercises2 + exercises3} />
+      <Header course={course.name} />
+      <Content2 parts={course.parts} />
+      {/* 1.3
+      <Total number={part1.exercises + part2.exercises + part3.exercises} /> */}
+      {/* 1.4 */}
+      <Total number={course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises} />
     </div>
   )
 }
@@ -24,6 +37,7 @@ const Header = (props) => (
 )
 
 // 1.1
+/*
 const Content1 = (props) => (
   <React.Fragment>
     <p>
@@ -37,15 +51,23 @@ const Content1 = (props) => (
     </p>
   </React.Fragment>
 )
+*/
 
-// 1.2
+// 1.2/1.3
 const Content = (props) => (
   <React.Fragment>
-    <Part part={props.part1} excercise={props.exercises1} />
-    <Part part={props.part2} excercise={props.exercises2} />
-    <Part part={props.part3} excercise={props.exercises3} />
+    <Part part={props.part1.name} excercise={props.part1.exercises} />
+    <Part part={props.part2.name} excercise={props.part2.exercises} />
+    <Part part={props.part3.name} excercise={props.part3.exercises} />
   </React.Fragment>
 )
+
+// 1.4
+const Content2 = (props) => {
+  return (props.parts.map(p => (
+    <Part part={p.name} excercise={p.exercises} />
+  )))
+}
 
 const Total = (props) => (
   <p>Number of exercises {props.number}</p>
