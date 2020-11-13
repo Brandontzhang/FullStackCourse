@@ -12,8 +12,6 @@ const App = (props) => {
     5: 0
   })
   let quoteNum = Math.floor(Math.random() * props.anecdotes.length)
-  console.log(quoteNum)
-
   let maxIndex = 0
   let mostVotes = 0
 
