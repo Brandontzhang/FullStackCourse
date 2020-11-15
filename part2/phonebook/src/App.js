@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './Components/Filter'
 import AddForm from './Components/AddForm'
 import Display from './Components/Display'
+import AddUserAlert from './Components/AddUserAlert'
 import service from './Services/services'
 
 const App = () => {
@@ -9,6 +10,8 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState(0)
     const [newFilter, setNewFilter] = useState('')
+    const [showAlert, setAlert] = useState(false)
+    const [showError, setError] = useState(false)
 
     const addName = (e) => {
         e.preventDefault()
@@ -16,11 +19,17 @@ const App = () => {
         let inBook = persons.reduce((b, p) => b || p.name === newName, false)
 
         if (!inBook) {
-            service.createPerson({name: newName, number: newNumber})
-                .then(person =>  setPersons([...persons, { name: newName, number: newNumber }]))
+            setAlert(true)
+            setTimeout(() => setAlert(false), 3000)
+            service.createPerson({ name: newName, number: newNumber })
+                .then(person => setPersons([...persons, { name: newName, number: newNumber }]))
         } else {
             const searchPerson = getPersonByName(newName)
             service.updateNumber(searchPerson, newNumber)
+                .catch((e) => {
+                    setError(true)
+                    setTimeout(() => setError(false), 3000)
+                })
         }
     }
 
@@ -39,6 +48,8 @@ const App = () => {
 
     return (
         <div>
+            {showAlert ? <AddUserAlert name={newName} error={false} /> : null}
+            {showError ? <AddUserAlert name={newName} error={true} /> : null}
             <h2>Phonebook</h2>
             <Filter newFilter={newFilter} setNewFilter={setNewFilter} />
             <h2>Add a new</h2>
