@@ -35,8 +35,6 @@ const DisplayCountry = ({ country }) => {
 
     return (
         <div>
-            {console.log("Weather should be set")}
-            {console.log(weather)}
             <h2>{country.name}</h2>
             <div>
                 <p>
