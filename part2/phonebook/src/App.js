@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import Filter from './Filter'
-import AddForm from './AddForm'
-import Display from './Display'
-import Axios from 'axios'
+import Filter from './Components/Filter'
+import AddForm from './Components/AddForm'
+import Display from './Components/Display'
+import service from './Services/services'
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -16,19 +16,26 @@ const App = () => {
         let inBook = persons.reduce((b, p) => b || p.name === newName, false)
 
         if (!inBook) {
-            setPersons([...persons, { name: newName, number: newNumber }])
+            service.createPerson({name: newName, number: newNumber})
+                .then(person =>  setPersons([...persons, { name: newName, number: newNumber }]))
         } else {
-            alert(`${newName} is already in the phonebook`)
+            const searchPerson = getPersonByName(newName)
+            service.updateNumber(searchPerson, newNumber)
         }
     }
 
+    const getPersonByName = (name) => {
+        return persons.find(p => p.name === name)
+    }
+
+    const deletePerson = (id) => {
+        service.deletePerson(id)
+    }
+
     useEffect(() => {
-        Axios
-            .get('http://localhost:3001/persons')
-            .then(res => {
-                setPersons(res.data)
-            })
-    }, [])
+        service.getPersons()
+            .then(persons => setPersons(persons))
+    }, [persons])
 
     return (
         <div>
@@ -37,7 +44,7 @@ const App = () => {
             <h2>Add a new</h2>
             <AddForm addName={addName} newName={newName} setNewName={setNewName} newNumber={newNumber} setNewNumber={setNewNumber} />
             <h2>Numbers</h2>
-            <Display persons={persons} newFilter={newFilter} />
+            <Display persons={persons} newFilter={newFilter} deletePerson={deletePerson} />
         </div>
     )
 }
