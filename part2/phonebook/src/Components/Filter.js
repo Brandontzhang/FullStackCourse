@@ -1,9 +1,17 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const Filter = ({ newFilter, setNewFilter }) => (
-    <div>
-        filter shown with <input value={ newFilter } onChange={(e) => {setNewFilter(e.target.value)}} />
-    </div>
-)
+const Filter = ({newFilter, setNewFilter}) => (
+  <div>
+        filter shown with <input value={ newFilter } onChange={(e) => {
+      setNewFilter(e.target.value);
+    }} />
+  </div>
+);
 
-export default Filter
+Filter.propTypes = {
+  newFilter: PropTypes.string,
+  setNewFilter: PropTypes.func,
+};
+
+export default Filter;
